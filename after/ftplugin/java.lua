@@ -19,7 +19,6 @@ os.execute("mkdir " .. workspace_dir)
 local capabilities = require("cmp_nvim_lsp").capabilities
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
-
 local config = {
 	cmd = {
 		"java",
@@ -105,17 +104,22 @@ local config = {
 		},
 		extendedClientCapabilities = extendedClientCapabilities,
 	},
-	init_options = {
-		bundles = {
-			debug_path,
-			test_path,
-		},
-	},
+	init_options = { bundles = {
+		debug_path,
+		test_path,
+	} },
 }
 
 config["on_attach"] = function(client, bufnr)
 	local _, _ = pcall(vim.lsp.codelens.refresh)
 	require("jdtls").setup_dap({ hotcodereplace = "auto" })
+	-- Comment out the following line if you don't want intellij like inlay hints
+	vim.lsp.inlay_hint.enable()
+	require("nvimtim.plugins.configs.lspconfig").on_attach(client, bufnr)
+	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
+	if status_ok then
+		jdtls_dap.setup_dap_main_class_configs()
+	end
 end
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
