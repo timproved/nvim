@@ -3,7 +3,6 @@ if not status then
 	vim.notify("jdtls not found", vim.log.levels.ERROR)
 	return
 end
-
 local home = os.getenv("HOME")
 local os_config = "linux"
 local debug_path = vim.fn.glob(
@@ -16,9 +15,9 @@ local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = vim.fn.stdpath("data") .. "/site/java/workspace-root/" .. project_name
 os.execute("mkdir " .. workspace_dir)
 
-local capabilities = require("cmp_nvim_lsp").capabilities
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
-extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+extendedClientCapabilities.onCompletionItemSelectedCommand = "editor.action.triggerParameterHints"
+
 local config = {
 	cmd = {
 		"java",
@@ -42,7 +41,6 @@ local config = {
 		workspace_dir,
 	},
 	root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }),
-	capabilities = capabilities,
 
 	settings = {
 		java = {
@@ -83,38 +81,41 @@ local config = {
 					profile = "GoogleStyle",
 				},
 			},
+			signatureHelp = { enabled = true },
+			completion = {
+				favoriteStaticMembers = {
+					"org.hamcrest.MatcherAssert.assertThat",
+					"org.hamcrest.Matchers.*",
+					"org.hamcrest.CoreMatchers.*",
+					"org.junit.jupiter.api.Assertions.*",
+					"java.util.Objects.requireNonNull",
+					"java.util.Objects.requireNonNullElse",
+					"org.mockito.Mockito.*",
+				},
+				importOrder = {
+					"java",
+					"javax",
+					"com",
+					"org",
+				},
+			},
 		},
-		signatureHelp = { enabled = true },
-		completion = {
-			favoriteStaticMembers = {
-				"org.hamcrest.MatcherAssert.assertThat",
-				"org.hamcrest.Matchers.*",
-				"org.hamcrest.CoreMatchers.*",
-				"org.junit.jupiter.api.Assertions.*",
-				"java.util.Objects.requireNonNull",
-				"java.util.Objects.requireNonNullElse",
-				"org.mockito.Mockito.*",
-			},
-			importOrder = {
-				"java",
-				"javax",
-				"com",
-				"org",
-			},
+	},
+	init_options = {
+		bundles = {
+			debug_path,
+			test_path,
 		},
 		extendedClientCapabilities = extendedClientCapabilities,
 	},
-	init_options = { bundles = {
-		debug_path,
-		test_path,
-	} },
 }
 
-config["on_attach"] = function(client, bufnr)
+config.on_attach = function(client, bufnr)
 	local _, _ = pcall(vim.lsp.codelens.refresh)
 	require("jdtls").setup_dap({ hotcodereplace = "auto" })
 	-- Comment out the following line if you don't want intellij like inlay hints
-	vim.lsp.inlay_hint.enable()
+	vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+	vim.lsp.buf.signature_help()
 	require("nvimtim.plugins.configs.lspconfig").on_attach(client, bufnr)
 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
 	if status_ok then

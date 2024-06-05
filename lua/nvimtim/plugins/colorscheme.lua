@@ -46,4 +46,10 @@ return {
 			vim.cmd("colorscheme rose-pine")
 		end,
 	},
+	{
+		"dasupradyumna/midnight.nvim",
+		config = function()
+			require("midnight").setup()
+		end,
+	},
 }
