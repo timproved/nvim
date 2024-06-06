@@ -110,18 +110,69 @@ local config = {
 		extendedClientCapabilities = extendedClientCapabilities,
 	},
 }
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local bufnr = args.buf
+		local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
+		local _, _ = pcall(vim.lsp.codelens.refresh)
+		require("jdtls").setup_dap({ hotcodereplace = "auto" })
+		-- Comment out the following line if you don't want intellij like inlay hints
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+		require("nvimtim.plugins.lsp")
+		local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
+		if status_ok then
+			jdtls_dap.setup_dap_main_class_configs()
+		end
+		local builtin = require("telescope.builtin")
+		vim.keymap.set(
+			"n",
+			"<leader>co",
+			"<Cmd>lua require'jdtls'.organize_imports()<CR>",
+			{ desc = "Organize Imports" }
+		)
+		vim.keymap.set(
+			"n",
+			"<leader>crv",
+			"<Cmd>lua require('jdtls').extract_variable()<CR>",
+			{ desc = "Extract Variable" }
+		)
+		vim.keymap.set(
+			"v",
+			"<leader>crv",
+			"<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>",
+			{ desc = "Extract Variable" }
+		)
+		vim.keymap.set(
+			"n",
+			"<leader>crc",
+			"<Cmd>lua require('jdtls').extract_constant()<CR>",
+			{ desc = "Extract Constant" }
+		)
+		vim.keymap.set(
+			"v",
+			"<leader>crc",
+			"<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>",
+			{ desc = "Extract Constant" }
+		)
+		vim.keymap.set(
+			"v",
+			"<leader>crm",
+			"<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>",
+			{ desc = "Extract Method" }
+		)
+	end,
+})
 
-config.on_attach = function(client, bufnr)
-	local _, _ = pcall(vim.lsp.codelens.refresh)
-	require("jdtls").setup_dap({ hotcodereplace = "auto" })
-	-- Comment out the following line if you don't want intellij like inlay hints
-	vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-	require("nvimtim.util.lsp_util").on_attach(bufnr)
-	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
-	if status_ok then
-		jdtls_dap.setup_dap_main_class_configs()
-	end
-end
+-- config.on_attach = function(client, bufnr)
+-- 	local _, _ = pcall(vim.lsp.codelens.refresh)
+-- 	require("jdtls").setup_dap({ hotcodereplace = "auto" })
+-- 	-- Comment out the following line if you don't want intellij like inlay hints
+-- 	vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+-- 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
+-- 	if status_ok then
+-- 		jdtls_dap.setup_dap_main_class_configs()
+-- 	end
+-- end
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	pattern = { "*.java" },
@@ -131,25 +182,3 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 })
 
 require("jdtls").start_or_attach(config)
-
-vim.keymap.set("n", "<leader>co", "<Cmd>lua require'jdtls'.organize_imports()<CR>", { desc = "Organize Imports" })
-vim.keymap.set("n", "<leader>crv", "<Cmd>lua require('jdtls').extract_variable()<CR>", { desc = "Extract Variable" })
-vim.keymap.set(
-	"v",
-	"<leader>crv",
-	"<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>",
-	{ desc = "Extract Variable" }
-)
-vim.keymap.set("n", "<leader>crc", "<Cmd>lua require('jdtls').extract_constant()<CR>", { desc = "Extract Constant" })
-vim.keymap.set(
-	"v",
-	"<leader>crc",
-	"<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>",
-	{ desc = "Extract Constant" }
-)
-vim.keymap.set(
-	"v",
-	"<leader>crm",
-	"<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>",
-	{ desc = "Extract Method" }
-)

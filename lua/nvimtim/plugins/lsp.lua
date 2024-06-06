@@ -1,4 +1,3 @@
-local jdtls = require("jdtls")
 return {
 	-- lspconfig
 	{
@@ -8,11 +7,8 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"b0o/SchemaStore.nvim",
 		},
-		---@class PluginLspOpts
 		opts = function()
 			return {
-				-- options for vim.diagnostic.config()
-				---@type vim.diagnostic.Opts
 				diagnostics = {
 					underline = true,
 					update_in_insert = false,
@@ -41,7 +37,6 @@ return {
 						},
 					},
 				},
-				---@type lspconfig.options
 				servers = {
 					lua_ls = {
 						-- keys = {},
@@ -104,7 +99,6 @@ return {
 						filetypes = { "c", "cpp" },
 					},
 				},
-				---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
 				setup = {
 					jdtls = function()
 						return true --avoid duplicate servers
@@ -113,7 +107,6 @@ return {
 			}
 		end,
 
-		---@param opts PluginLspOpts
 		config = function(_, opts)
 			local servers = opts.servers
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -201,7 +194,9 @@ return {
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					-- Opens a popup that displays documentation about the word under your cursor
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
+					map("gK", vim.lsp.buf.signature_help, "Signature Help")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					vim.keymap.set("i", "C-k", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature Help" })
 				end,
 			})
 		end,
