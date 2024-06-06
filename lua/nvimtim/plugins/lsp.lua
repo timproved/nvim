@@ -22,20 +22,13 @@ return {
 					},
 					severity_sort = true,
 				},
-				-- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-				-- Be aware that you also will need to properly configure your LSP server to
-				-- provide the inlay hints.
 				inlay_hints = {
 					enabled = true,
 					exclude = {}, -- filetypes for which you don't want to enable inlay hints
 				},
-				-- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
-				-- Be aware that you also will need to properly configure your LSP server to
-				-- provide the code lenses.
 				codelens = {
 					enabled = false,
 				},
-				-- Enable lsp cursor word highlighting
 				document_highlight = {
 					enabled = true,
 				},
@@ -48,21 +41,9 @@ return {
 						},
 					},
 				},
-				-- options for vim.lsp.buf.format
-				-- `bufnr` and `filter` is handled by the NvimTim formatter,
-				-- but can be also overridden when specified
-				format = {
-					formatting_options = nil,
-					timeout_ms = nil,
-				},
-				-- LSP Server Settings
 				---@type lspconfig.options
 				servers = {
 					lua_ls = {
-						-- mason = false, -- set to false if you don't want this server to be installed with mason
-						-- Use this to add any additional keymaps
-						-- for specific lsp servers
-						-- ---@type LazyKeysSpec[]
 						-- keys = {},
 						settings = {
 							Lua = {
@@ -123,37 +104,20 @@ return {
 						filetypes = { "c", "cpp" },
 					},
 				},
-				-- you can do any additional lsp server setup here
-				-- return true if you don't want this server to be setup with lspconfig
 				---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
 				setup = {
 					jdtls = function()
-						return true --
+						return true --avoid duplicate servers
 					end,
-					-- example to setup with typescript.nvim
-					-- tsserver = function(_, opts)
-					--   require("typescript").setup({ server = opts })
-					--   return true
-					-- end,
-					-- Specify * to use this function as a fallback for any server
-					-- ["*"] = function(server, opts) end,
 				},
 			}
 		end,
+
 		---@param opts PluginLspOpts
 		config = function(_, opts)
-			vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
-
 			local servers = opts.servers
-			local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-			local capabilities = vim.tbl_deep_extend(
-				"force",
-				{},
-				vim.lsp.protocol.make_client_capabilities(),
-				has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-				opts.capabilities or {}
-			)
-
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 			local function setup(server)
 				local server_opts = vim.tbl_deep_extend("force", {
 					capabilities = vim.deepcopy(capabilities),
@@ -212,6 +176,9 @@ return {
 					if type(settings) ~= "table" then
 						settings = {}
 					end
+					require("lsp_signature").on_attach({
+						-- ... setup options here ...
+					}, bufnr)
 
 					local builtin = require("telescope.builtin")
 					local map = function(keys, func, desc)
@@ -291,6 +258,14 @@ return {
 					end
 				end
 			end)
+		end,
+	},
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts)
+			require("lsp_signature").setup(opts)
 		end,
 	},
 }

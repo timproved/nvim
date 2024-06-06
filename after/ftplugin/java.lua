@@ -14,9 +14,10 @@ local test_path = vim.fn.glob(home .. "/.local/share/nvim/mason/packages/java-te
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = vim.fn.stdpath("data") .. "/site/java/workspace-root/" .. project_name
 os.execute("mkdir " .. workspace_dir)
-
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
-extendedClientCapabilities.onCompletionItemSelectedCommand = "editor.action.triggerParameterHints"
+extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
 local config = {
 	cmd = {
@@ -41,7 +42,7 @@ local config = {
 		workspace_dir,
 	},
 	root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }),
-
+	capabilities = capabilities,
 	settings = {
 		java = {
 			eclipse = {
@@ -77,7 +78,7 @@ local config = {
 			format = {
 				enabled = true,
 				settings = {
-					url = vim.fn.stdpath("config") .. "/lang-servers/intellij-java-google-java-format.xml",
+					url = vim.fn.stdpath("config") .. "/lang-servers/intellij-java-google-style.xml",
 					profile = "GoogleStyle",
 				},
 			},
@@ -115,8 +116,7 @@ config.on_attach = function(client, bufnr)
 	require("jdtls").setup_dap({ hotcodereplace = "auto" })
 	-- Comment out the following line if you don't want intellij like inlay hints
 	vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-	vim.lsp.buf.signature_help()
-	require("nvimtim.plugins.configs.lspconfig").on_attach(client, bufnr)
+	require("nvimtim.util.lsp_util").on_attach(bufnr)
 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
 	if status_ok then
 		jdtls_dap.setup_dap_main_class_configs()

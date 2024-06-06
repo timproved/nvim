@@ -1,125 +1,101 @@
 return {
-
-	-- auto completion
 	{
 		"hrsh7th/nvim-cmp",
-		version = false, -- last release is way too old
 		event = "InsertEnter",
+		lazy = false,
+		priority = 100,
 		dependencies = {
+			{
+				"L3MON4D3/LuaSnip",
+				build = (function()
+					if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
+						return
+					end
+					return "make install_jsregexp"
+				end)(),
+			},
+			"saadparwaiz1/cmp_luasnip",
+			-- "hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-buffer",
+			"rcarriga/cmp-dap",
+			"rafamadriz/friendly-snippets",
 		},
-		-- Not all LSP servers add brackets when completing a function.
-		-- To better deal with this, add a custom option to cmp,
-		-- that you can configure. For example:
-		--
-		-- ```lua
-		-- opts = {
-		--   auto_brackets = { "python" }
-		-- }
-		-- ```
-
-		opts = function()
-			vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+		config = function()
+			-- See `:help cmp`
 			local cmp = require("cmp")
-			local defaults = require("cmp.config.default")()
-			return {
-				auto_brackets = {}, -- configure any filetype to auto add brackets
-				completion = {
-					completeopt = "menu,menuone,noinsert",
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
-					["<C-y>"] = cmp.mapping.confirm(),
-					["<S-CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					["<C-CR>"] = function(fallback)
-						cmp.abort()
-						fallback()
+			local luasnip = require("luasnip")
+			require("luasnip.loaders.from_vscode").lazy_load()
+
+			cmp.setup({
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
 					end,
+				},
+				completion = { completeopt = "menu,menuone,noinsert" },
+
+				mapping = cmp.mapping.preset.insert({
+					["<C-n>"] = cmp.mapping.select_next_item(),
+					["<C-p>"] = cmp.mapping.select_prev_item(),
+					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-u>"] = cmp.mapping.scroll_docs(-4),
+					["<C-d>"] = cmp.mapping.scroll_docs(4),
+
+					-- Manually trigger a completion from nvim-cmp.
+					--  Generally you don't need this, because nvim-cmp will display
+					--  completions whenever it has completion options available.
+					["<C-Space>"] = cmp.mapping.complete({}),
+					-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					["<Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item()
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+						-- this will auto complete if our cursor in next to a word and we press tab
+						-- elseif has_words_before() then
+						--     cmp.complete()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+
+					["<S-Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
 				}),
-				sources = cmp.config.sources({
+				sources = {
 					{ name = "nvim_lsp" },
-					{ name = "path" },
-				}, {
+					{ name = "nvim_lsp_signature_help" },
+					{ name = "luasnip" },
 					{ name = "buffer" },
-				}),
-				experimental = {
-					ghost_text = {
-						hl_group = "CmpGhostText",
-					},
+					{ name = "path" },
 				},
-				sorting = defaults.sorting,
-			}
-		end,
+			})
+			require("cmp").setup({
+				enabled = function()
+					return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
+				end,
+			})
 
-		config = function(_, opts)
-			local parse = require("cmp.utils.snippet").parse
-			require("cmp.utils.snippet").parse = function(input)
-				local ok, ret = pcall(parse, input)
-				if ok then
-					return ret
-				end
-				return require("nvimtim.util.completion_util").snippet_preview(input)
-			end
-
-			local cmp = require("cmp")
-			cmp.setup(opts)
-			cmp.event:on("confirm_done", function(event)
-				if vim.tbl_contains(opts.auto_brackets or {}, vim.bo.filetype) then
-					require("nvimtim.util.completion_util").auto_brackets(event.entry)
-				end
-			end)
-			cmp.event:on("menu_opened", function(event)
-				require("nvimtim.util.completion_util").add_missing_snippet_docs(event.window)
-			end)
-		end,
-	},
-
-	-- snippets
-	{
-		"nvim-cmp",
-		dependencies = {
-			{
-				"garymjr/nvim-snippets",
-				opts = {
-					friendly_snippets = true,
+			require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+				sources = {
+					{ name = "dap" },
 				},
-				dependencies = { "rafamadriz/friendly-snippets" },
-			},
-		},
-		opts = function(_, opts)
-			opts.snippet = {
-				expand = function(item)
-					return require("nvimtim.util.completion_util").expand(item.body)
-				end,
-			}
-			table.insert(opts.sources, { name = "snippets" })
+			})
+			require("cmp").setup.filetype({ "sql" }, {
+				sources = {
+					{ name = "vim-dadbod-completion" },
+					{ name = "buffer" },
+				},
+			})
 		end,
-		keys = {
-			{
-				"<Tab>",
-				function()
-					return vim.snippet.active({ direction = 1 }) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<Tab>"
-				end,
-				expr = true,
-				silent = true,
-				mode = { "i", "s" },
-			},
-			{
-				"<S-Tab>",
-				function()
-					return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<Tab>"
-				end,
-				expr = true,
-				silent = true,
-				mode = { "i", "s" },
-			},
-		},
 	},
 }
