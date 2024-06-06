@@ -67,8 +67,14 @@ return {
 					},
 					bashls = {},
 					dockerls = {},
-					tailwindcss = {},
+					tailwindcss = {
+						filetypes_exclude = { "markdown" },
+						-- filetypes_include = {},
+					},
 					lemminx = {},
+					marksman = {
+						filetypes = { "markdown", "markdown.mdx" },
+					},
 					cssls = {},
 					tsserver = {
 						server_capabilities = {
@@ -93,9 +99,33 @@ return {
 								schemas = require("schemastore").yaml.schemas(),
 							},
 						},
+						capabilities = {
+							textDocument = {
+								foldingRange = {
+									dynamicRegistration = false,
+									lineFoldingOnly = true,
+								},
+							},
+						},
 					},
 					clangd = {
-						init_options = { clangdFileStatus = true },
+						capabilities = {
+							offsetEncoding = { "utf-16" },
+						},
+						cmd = {
+							"clangd",
+							"--background-index",
+							"--clang-tidy",
+							"--header-insertion=iwyu",
+							"--completion-style=detailed",
+							"--function-arg-placeholders",
+							"--fallback-style=llvm",
+						},
+						init_options = {
+							usePlaceholders = true,
+							completeUnimported = true,
+							clangdFileStatus = true,
+						},
 						filetypes = { "c", "cpp" },
 					},
 				},
@@ -196,7 +226,6 @@ return {
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
 					map("gK", vim.lsp.buf.signature_help, "Signature Help")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-					vim.keymap.set("i", "C-k", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature Help" })
 				end,
 			})
 		end,

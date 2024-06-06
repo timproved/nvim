@@ -13,7 +13,6 @@ return {
 				["javascriptreact"] = { "prettier" },
 				["typescript"] = { "prettier" },
 				["typescriptreact"] = { "prettier" },
-				["vue"] = { "prettier" },
 				["css"] = { "prettier" },
 				["scss"] = { "prettier" },
 				["less"] = { "prettier" },
@@ -21,13 +20,11 @@ return {
 				["json"] = { "prettier" },
 				["jsonc"] = { "prettier" },
 				["yaml"] = { "prettier" },
-				["markdown"] = { "prettier" },
-				["markdown.mdx"] = { "prettier" },
-				["graphql"] = { "prettier" },
-				["handlebars"] = { "prettier" },
+				["markdown"] = { { "prettierd", "prettier" }, "markdownlint", "markdown-toc" },
+				["markdown.mdx"] = { { "prettierd", "prettier" }, "markdownlint", "markdown-toc" },
 			},
 			format_on_save = {
-				lsp_fallback = true,
+				lsp_fallback = false,
 				async = false,
 				timeout_ms = 500,
 			},
@@ -35,7 +32,7 @@ return {
 		})
 		vim.keymap.set({ "n", "v" }, "<leader>fo", function()
 			conform.format({
-				lsp_fallback = true,
+				lsp_fallback = false,
 				async = false,
 				tmeout_ms = 500,
 			})
