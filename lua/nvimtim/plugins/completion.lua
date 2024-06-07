@@ -14,14 +14,22 @@ return {
 			"hrsh7th/cmp-buffer",
 			"rcarriga/cmp-dap",
 			"rafamadriz/friendly-snippets",
+			"zbirenbaum/copilot-cmp",
 		},
 		config = function()
-			-- See `:help cmp`
 			local cmp = require("cmp")
 			local lspkind = require("lspkind")
-			lspkind.init({})
+			lspkind.init({
+				symbol_map = {
+					Copilot = "",
+				},
+			})
 			local luasnip = require("luasnip")
 			require("luasnip.loaders.from_vscode").lazy_load()
+			require("copilot_cmp").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
 
 			cmp.setup({
 				snippet = {
@@ -64,6 +72,7 @@ return {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
+					{ name = "copilot" },
 					{ name = "path" },
 				},
 				formatting = {
@@ -71,18 +80,16 @@ return {
 						mode = "symbol_text", -- show only symbol annotations
 						maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 						ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 					}),
 				},
 				window = {
 					completion = {
 						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+						scrollbar = "║",
 					},
-					documentation = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
-				},
-				experimental = {
-					ghost_text = {
-						hl_group = "CmpGhostText",
+					documentation = {
+						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+						scrollbar = "║",
 					},
 				},
 			})

@@ -199,6 +199,8 @@ return {
 					if type(settings) ~= "table" then
 						settings = {}
 					end
+
+					-- I don't know if I like this better than noice.nvims lsp signatures
 					require("lsp_signature").on_attach({
 						-- ... setup options here ...
 					}, bufnr)
