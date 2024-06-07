@@ -81,7 +81,7 @@ local config = {
 				enabled = true,
 				settings = {
 					url = vim.fn.stdpath("config") .. "/lang-servers/intellij-java-google-style.xml",
-					profile = "GoogleStyle",
+					profile = "intellij",
 				},
 			},
 			signatureHelp = { enabled = true },
@@ -122,6 +122,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			-- Comment out the following line if you don't want intellij like inlay hints
 			vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 			require("jdtls.dap").setup_dap_main_class_configs()
+
+			vim.opt.tabstop = 4
+			vim.opt.shiftwidth = 4
+
 			local builtin = require("telescope.builtin")
 			vim.keymap.set(
 				"n",
