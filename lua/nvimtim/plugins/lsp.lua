@@ -224,7 +224,7 @@ return {
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					-- Opens a popup that displays documentation about the word under your cursor
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
-					map("gK", vim.lsp.buf.signature_help, "Signature Help")
+					map("gk", vim.lsp.buf.signature_help, "Signature Help")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 				end,
 			})

@@ -5,16 +5,9 @@ return {
 		lazy = false,
 		priority = 100,
 		dependencies = {
-			{
-				"L3MON4D3/LuaSnip",
-				build = (function()
-					if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-						return
-					end
-					return "make install_jsregexp"
-				end)(),
-			},
+			{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 			"saadparwaiz1/cmp_luasnip",
+			"onsails/lspkind.nvim",
 			-- "hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
@@ -25,6 +18,8 @@ return {
 		config = function()
 			-- See `:help cmp`
 			local cmp = require("cmp")
+			local lspkind = require("lspkind")
+			lspkind.init({})
 			local luasnip = require("luasnip")
 			require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -42,12 +37,7 @@ return {
 					["<C-y>"] = cmp.mapping.confirm({ select = true }),
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
-
-					-- Manually trigger a completion from nvim-cmp.
-					--  Generally you don't need this, because nvim-cmp will display
-					--  completions whenever it has completion options available.
 					["<C-Space>"] = cmp.mapping.complete({}),
-					-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
@@ -60,7 +50,6 @@ return {
 							fallback()
 						end
 					end, { "i", "s" }),
-
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_prev_item()
@@ -73,10 +62,28 @@ return {
 				}),
 				sources = {
 					{ name = "nvim_lsp" },
-					{ name = "nvim_lsp_signature_help" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
 					{ name = "path" },
+				},
+				formatting = {
+					format = lspkind.cmp_format({
+						mode = "symbol_text", -- show only symbol annotations
+						maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+						ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+					}),
+				},
+				window = {
+					completion = {
+						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+					},
+					documentation = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
+				},
+				experimental = {
+					ghost_text = {
+						hl_group = "CmpGhostText",
+					},
 				},
 			})
 			require("cmp").setup({
