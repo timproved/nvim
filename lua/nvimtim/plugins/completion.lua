@@ -70,9 +70,10 @@ return {
 				}),
 				sources = {
 					{ name = "nvim_lsp" },
+					{ name = "lazydev" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
-					{ name = "copilot" },
+					-- { name = "copilot" },
 					{ name = "path" },
 				},
 				formatting = {
