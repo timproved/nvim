@@ -200,9 +200,12 @@ return {
 						settings = {}
 					end
 
-					-- I don't know if I like this better than noice.nvims lsp signatures
+					-- -- I don't know if I like this better than noice.nvims lsp signatures
 					require("lsp_signature").on_attach({
-						-- ... setup options here ...
+						bind = true, -- This is mandatory, otherwise border config won't get registered.
+						handler_opts = {
+							border = "single",
+						},
 					}, bufnr)
 
 					local builtin = require("telescope.builtin")
