@@ -8,7 +8,7 @@ return {
 			require("bufferline").setup({
 				options = {
 					mode = "buffers", -- set to "tabs" to only show tabpages instead
-					themable = true, -- allows highlight groups to be overriden i.e. sets highlights as default
+					themable = false, -- allows highlight groups to be overriden i.e. sets highlights as default
 					numbers = "none",
 					indicator = {
 						icon = "▎", -- this should be omitted if indicator style is not 'icon'
@@ -34,8 +34,8 @@ return {
 					max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
 					truncate_names = true, -- whether or not tab names should be truncated
 					tab_size = 18,
-					diagnostics = "false", -- "nvim_lsp", "coc", "ale", "or null" so
-					diagnostics_update_in_insert = false,
+					diagnostics = "nvim_lsp", -- "nvim_lsp", "coc", "ale", "or null" so
+					diagnostics_update_in_insert = "",
 					-- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
 					diagnostics_indicator = function(count, level, diagnostics_dict, context)
 						return "(" .. count .. ")"
@@ -406,19 +406,6 @@ return {
 						enabled = false,
 					},
 				},
-				routes = {
-					{
-						filter = {
-							event = "msg_show",
-							any = {
-								{ find = "%d+L, %d+B" },
-								{ find = "; after #%d+" },
-								{ find = "; before #%d+" },
-							},
-						},
-						view = "mini",
-					},
-				},
 				cmdline = {
 					enabled = false,
 				},
@@ -429,11 +416,12 @@ return {
 					bottom_search = true, -- use a classic bottom cmdline for search
 					command_palette = true, -- position the cmdline and popupmenu together
 					long_message_to_split = true, -- long messages will be sent to a split
-					lsp_doc_border = true, -- add a border to hover docs and signature help
+					lsp_doc_border = false, -- add a border to hover docs and signature help
 				},
 				popupmenu = {
 					enabled = false,
 				},
+				notify = { false },
 			})
 		end,
 	},
