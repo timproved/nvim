@@ -5,11 +5,6 @@ if not status then
 end
 local home = os.getenv("HOME")
 local os_config = "linux"
-local debug_path = vim.fn.glob(
-	home
-		.. "/.local/share/nvim/mason/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar"
-)
-local test_path = vim.fn.glob(home .. "/.local/share/nvim/mason/packages/java-test/extension/server/*.jar")
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = vim.fn.stdpath("data") .. "/site/java/workspace-root/" .. project_name
@@ -19,6 +14,19 @@ capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp"
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+
+-- Needed for debugging
+local bundles = {
+	vim.fn.glob(
+		vim.env.HOME .. "/.local/share/nvim/mason/share/java-debug-adapter/com.microsoft.java.debug.plugin.jar"
+	),
+}
+
+-- Needed for running/debugging unit tests
+vim.list_extend(
+	bundles,
+	vim.split(vim.fn.glob(vim.env.HOME .. "/.local/share/nvim/mason/share/java-test/*.jar", 1), "\n")
+)
 
 local config = {
 	cmd = {
@@ -104,10 +112,7 @@ local config = {
 		},
 	},
 	init_options = {
-		bundles = {
-			debug_path,
-			test_path,
-		},
+		bundles = bundles,
 		extendedClientCapabilities = extendedClientCapabilities,
 	},
 }
@@ -162,6 +167,28 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				"<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>",
 				{ desc = "Extract Method" }
 			)
+			vim.keymap.set(
+				"n",
+				"<leader>Jt",
+				"<Cmd> lua require('jdtls').test_nearest_method()<CR>",
+				{ desc = "[J]ava [T]est Method" }
+			)
+			-- Set a Vim motion to <Space> + <Shift>J + t to run the test method that is currently selected in visual mode
+			vim.keymap.set(
+				"v",
+				"<leader>Jt",
+				"<Esc><Cmd> lua require('jdtls').test_nearest_method(true)<CR>",
+				{ desc = "[J]ava [T]est Method" }
+			)
+			-- Set a Vim motion to <Space> + <Shift>J + <Shift>T to run an entire test suite (class)
+			vim.keymap.set(
+				"n",
+				"<leader>JT",
+				"<Cmd> lua require('jdtls').test_class()<CR>",
+				{ desc = "[J]ava [T]est Class" }
+			)
+			-- Set a Vim motion to <Space> + <Shift>J + u to update the project configuration
+			vim.keymap.set("n", "<leader>Ju", "<Cmd> JdtUpdateConfig<CR>", { desc = "[J]ava [U]pdate Config" })
 		end
 	end,
 })

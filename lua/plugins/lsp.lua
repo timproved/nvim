@@ -250,6 +250,7 @@ return {
 				"jdtls",
 				"java-debug-adapter",
 				"java-test",
+				"google-java-format",
 				--Python
 				"pyright",
 				"ruff-lsp",
@@ -294,7 +295,7 @@ return {
 		event = "VeryLazy",
 		opts = {},
 		config = function(_, opts)
-			require("lsp_signature").setup(opts)
+			-- require("lsp_signature").setup(opts)
 		end,
 	},
 }

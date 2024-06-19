@@ -1,9 +1,8 @@
 return {
 	{
 		"hrsh7th/nvim-cmp",
+		version = false,
 		event = "InsertEnter",
-		lazy = false,
-		priority = 100,
 		dependencies = {
 			{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 			"saadparwaiz1/cmp_luasnip",
@@ -72,23 +71,17 @@ return {
 				},
 				window = {},
 			})
-			require("cmp").setup({
-				enabled = function()
-					return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
-				end,
-			})
-
-			require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-				sources = {
-					{ name = "dap" },
-				},
-			})
-			require("cmp").setup.filetype({ "sql" }, {
-				sources = {
-					{ name = "vim-dadbod-completion" },
-					{ name = "buffer" },
-				},
-			})
+			-- require("cmp").setup({
+			-- 	enabled = function()
+			-- 		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
+			-- 	end,
+			-- })
+			--
+			-- require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+			-- 	sources = {
+			-- 		{ name = "dap" },
+			-- 	},
+			-- })
 		end,
 	},
 }
