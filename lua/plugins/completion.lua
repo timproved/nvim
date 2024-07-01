@@ -41,23 +41,25 @@ return {
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
 					["<C-Space>"] = cmp.mapping.complete({}),
 					["<Tab>"] = cmp.mapping(function(fallback)
-						if ls.expand_or_jumpable() then
-							ls.expand_or_jump()
-						else
-							fallback()
+						if vim.snippet.active then
+							if ls.expand_or_jumpable() then
+								ls.expand_or_jump()
+							else
+								fallback()
+							end
 						end
-					end, { "i", "s" }),
+					end, { "i" }),
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if ls.jumpable(-1) then
 							ls.jump(-1)
 						else
 							fallback()
 						end
-					end, { "i", "s" }),
+					end, { "i" }),
 				}),
 				sources = {
 					{ name = "nvim_lsp" },
-					-- { name = "luasnip" },
+					{ name = "luasnip" },
 					{ name = "buffer" },
 					{ name = "path" },
 				},
