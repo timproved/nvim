@@ -9,18 +9,31 @@ return {
 		},
 		opts = function()
 			return {
+				---@type vim.diagnostic.Opts
 				diagnostics = {
 					underline = true,
 					update_in_insert = false,
 					virtual_text = {
 						spacing = 4,
 						source = "if_many",
+						prefix = "icons",
+						-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+						-- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
+						-- prefix = "icons",
 					},
 					severity_sort = true,
+					signs = {
+						text = {
+							[vim.diagnostic.severity.ERROR] = "",
+							[vim.diagnostic.severity.WARN] = "",
+							[vim.diagnostic.severity.HINT] = "",
+							[vim.diagnostic.severity.INFO] = "",
+						},
+					},
 				},
 				inlay_hints = {
 					enabled = true,
-					exclude = {}, -- filetypes for which you don't want to enable inlay hints
+					exclude = {}, -- filetypes for which you don't want to enable inlay hintsawdawd
 				},
 				codelens = {
 					enabled = false,
@@ -76,6 +89,7 @@ return {
 						-- filetypes = {}
 					},
 					lemminx = {},
+					pyright = {},
 					marksman = {
 						filetypes = { "markdown", "markdown.mdx" },
 					},
@@ -194,6 +208,9 @@ return {
 					handlers = { setup },
 				})
 			end
+
+			vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local bufnr = args.buf
@@ -257,7 +274,6 @@ return {
 				"google-java-format",
 				--Python
 				"pyright",
-				"ruff-lsp",
 				"debugpy",
 				"mypy",
 				"ruff",

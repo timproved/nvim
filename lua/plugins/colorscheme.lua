@@ -15,7 +15,7 @@ return {
 					keywords = { italic = false },
 					-- Background styles. Can be "dark", "transparent" or "normal"
 					sidebars = "transparent", -- style for sidebars, see below
-					floats = "transparent", -- style for floating windows
+					floats = "transparent", -- style for floating windowsawdawd
 				},
 			})
 			-- vim.cmd("colorscheme tokyonight")
