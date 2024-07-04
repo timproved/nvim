@@ -16,7 +16,7 @@ return {
 					virtual_text = {
 						spacing = 4,
 						source = "if_many",
-						prefix = "icons",
+						prefix = "●",
 						-- this will set set the prefix to a function that returns the diagnostics icon based on the severity
 						-- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
 						-- prefix = "icons",
@@ -89,7 +89,6 @@ return {
 						-- filetypes = {}
 					},
 					lemminx = {},
-					pyright = {},
 					marksman = {
 						filetypes = { "markdown", "markdown.mdx" },
 					},
@@ -276,9 +275,9 @@ return {
 				"pyright",
 				"debugpy",
 				"mypy",
-				"ruff",
+				"ruff-lsp",
 				"black",
-				"isort",
+                "isort",
 				--Web
 				"html-lsp",
 				"prettier",

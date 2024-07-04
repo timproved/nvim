@@ -76,7 +76,7 @@ return {
 			{
 				"<leader>cl",
 				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-				desc = "LSP Definitions / references / ... (Trouble)",
+				desc = "LSP Definitions /references / ... (Trouble)",
 			},
 			{
 				"<leader>xL",
@@ -108,6 +108,7 @@ return {
 						refresh = "gr",
 						open = "<M-CR>",
 					},
+
 					layout = {
 						position = "bottom", -- | top | left | right
 						ratio = 0.4,

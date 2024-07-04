@@ -9,9 +9,9 @@ return {
 		-- run the setup function for none-ls to setup our different formatters
 		null_ls.setup({
 			sources = {
-				-- setup lua formatter
+				-- Lua:
 				null_ls.builtins.formatting.stylua,
-				-- setup eslint linter for javascript
+				-- TS / JS
 				require("none-ls.diagnostics.eslint_d"),
 				-- setup prettier to format languages that are not lua
 				null_ls.builtins.formatting.prettierd.with({
@@ -24,13 +24,16 @@ return {
 							}
 					end,
 				}),
+				-- Docker
 				null_ls.builtins.diagnostics.hadolint,
+				-- Markdown
+				null_ls.builtins.diagnostics.markdownlint,
+				-- Python:
 				null_ls.builtins.formatting.black,
 				null_ls.builtins.diagnostics.mypy,
+                null_ls.builtins.formatting.isort,
 			},
 		})
-
-		-- set up a vim motion for <Space> + c + f to automatically format our code based on which langauge server is active
-		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { desc = "[C]ode [F]ormat" })
+		vim.keymap.set("n", "<leader>fo", vim.lsp.buf.format, { desc = "[F]ormat" })
 	end,
 }
