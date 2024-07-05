@@ -33,7 +33,7 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "120"
-vim.opt.termguicolors = true
+vim.opt.laststatus = 3
 
 -- Searching Behaviors
 vim.opt.ignorecase = true -- ignore case in search
