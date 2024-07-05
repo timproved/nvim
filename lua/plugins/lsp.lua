@@ -277,10 +277,11 @@ return {
 				"mypy",
 				"ruff-lsp",
 				"black",
-                "isort",
+				"isort",
 				--Web
 				"html-lsp",
-				"prettier",
+				"prettierd",
+				"eslint_d",
 				--Markdown
 				"markdownlint",
 			},
