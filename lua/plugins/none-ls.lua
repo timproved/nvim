@@ -1,5 +1,6 @@
 return {
     "nvimtools/none-ls.nvim",
+    event = "BufEnter",
     dependencies = {
         "nvimtools/none-ls-extras.nvim",
     },

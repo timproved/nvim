@@ -228,6 +228,7 @@ return {
 	--Neotree File Tree
 	{
 		"nvim-neo-tree/neo-tree.nvim",
+        lazy = "VeryLazy",
 		branch = "v3.x",
 		cmd = "Neotree",
 		keys = {

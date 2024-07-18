@@ -1,9 +1,11 @@
-vim.opt.number = true         -- display line numbers
+vim.g.bigfile_size = 1024 * 1024 * 1.5 -- 1.5 MB
+
+vim.opt.number = true         -- display line numbersawdawdawdadw
 vim.opt.relativenumber = true -- display relative line numbers
 vim.opt.numberwidth = 2       -- set width of line number column
 vim.opt.signcolumn = "yes"    -- always show sign column
 vim.opt.wrap = false          -- display lines as single line
-vim.opt.scrolloff = 10        -- number of lines to keep above/below cursor
+vim.opt.scrolloff = 15        -- number of lines to keep above/below curso
 vim.opt.sidescrolloff = 8     -- number of columns to keep to the left/right of cursor
 
 vim.opt.expandtab = true      -- convert tabs to spaces
@@ -15,11 +17,9 @@ vim.opt.breakindent = true    -- enable line breaking indentation
 vim.opt.smartindent = true
 vim.opt.conceallevel = 1
 
-vim.opt.wrap = false
-
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = "~/.config/.vim/undodir"
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
@@ -28,9 +28,9 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.guicursor = ""
 
-vim.opt.scrolloff = 12
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
+
 
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "120"
@@ -39,3 +39,5 @@ vim.opt.laststatus = 3
 -- Searching Behaviors
 vim.opt.ignorecase = true -- ignore case in search
 vim.opt.smartcase = true  -- match case if explicitly stated
+
+vim.opt.pumheight = 20
