@@ -1,8 +1,8 @@
 return {
-	{ "folke/tokyonight.nvim",
+	{
+		"folke/tokyonight.nvim",
 		config = function()
-			require("tokyonight").setup({
-				-- your configuration comes here
+			require("tokyonight").setup({ -- your configuration comes here
 				-- or leave it empty to use the default settings
 				style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
 				transparent = true, -- Enable this to disable setting the background color
@@ -72,7 +72,52 @@ return {
 					h6 = "foam",
 				},
 			})
-			vim.cmd("colorscheme rose-pine")
+			-- vim.cmd("colorscheme rose-pine")
+		end,
+	},
+	{
+		"gbprod/nord.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("nord").setup({
+				transparent = true, -- Enable this to disable setting the background color
+				terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+				diff = { mode = "bg" }, -- enables/disables colorful backgrounds when used in diff mode. values : [bg|fg]
+				borders = true, -- Enable the border between verticaly split windows visible
+				errors = { mode = "none" }, -- Display mode for errors and diagnostics
+				-- values : [bg|fg|none]
+				search = { theme = "vim" }, -- theme for highlighting search results
+				-- values : [vim|vscode]
+				styles = {
+					comments = { italic = false },
+					keywords = {},
+					functions = {},
+					variables = {},
+
+					-- To customize lualine/bufferline
+					bufferline = {
+						current = { bold = true },
+						modified = { italic = true },
+					},
+				},
+
+				-- colorblind mode
+				-- see https://github.com/EdenEast/nightfox.nvim#colorblind
+				-- simulation mode has not been implemented yet.
+				colorblind = {
+					enable = false,
+					preserve_background = false,
+					severity = {
+						protan = 0.0,
+						deutan = 0.0,
+						tritan = 0.0,
+					},
+				},
+
+				on_highlights = function(highlights, colors) end,
+			})
+			vim.cmd.colorscheme("nord")
 		end,
 	},
 }
