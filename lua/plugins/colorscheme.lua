@@ -76,47 +76,31 @@ return {
 		end,
 	},
 	{
-		"gbprod/nord.nvim",
+		"shaunsingh/nord.nvim",
 		lazy = false,
-		priority = 1000,
 		config = function()
-			require("nord").setup({
-				transparent = true, -- Enable this to disable setting the background color
-				terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
-				diff = { mode = "bg" }, -- enables/disables colorful backgrounds when used in diff mode. values : [bg|fg]
-				borders = true, -- Enable the border between verticaly split windows visible
-				errors = { mode = "none" }, -- Display mode for errors and diagnostics
-				-- values : [bg|fg|none]
-				search = { theme = "vim" }, -- theme for highlighting search results
-				-- values : [vim|vscode]
-				styles = {
-					comments = { italic = false },
-					keywords = {},
-					functions = {},
-					variables = {},
-
-					-- To customize lualine/bufferline
-					bufferline = {
-						current = { bold = true },
-						modified = { italic = true },
-					},
-				},
-
-				-- colorblind mode
-				-- see https://github.com/EdenEast/nightfox.nvim#colorblind
-				-- simulation mode has not been implemented yet.
-				colorblind = {
-					enable = false,
-					preserve_background = false,
-					severity = {
-						protan = 0.0,
-						deutan = 0.0,
-						tritan = 0.0,
-					},
-				},
-
-				on_highlights = function(highlights, colors) end,
+			local highlights = require("nord").bufferline.highlights({
+				italic = true,
+				bold = true,
 			})
+
+			require("bufferline").setup({
+				options = {
+					separator_style = "thin",
+				},
+				highlights = highlights,
+			})
+
+			-- Example config in lua
+			vim.g.nord_contrast = true
+			vim.g.nord_borders = true
+			vim.g.nord_disable_background = true
+			vim.g.nord_italic = false
+			vim.g.nord_uniform_diff_background = true
+			vim.g.nord_bold = true
+
+			-- Load the colorscheme
+			require("nord").set()
 			vim.cmd.colorscheme("nord")
 		end,
 	},
