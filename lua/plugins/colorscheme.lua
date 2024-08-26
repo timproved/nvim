@@ -72,7 +72,7 @@ return {
 					h6 = "foam",
 				},
 			})
-			-- vim.cmd("colorscheme rose-pine")
+			vim.cmd("colorscheme rose-pine-moon")
 		end,
 	},
 	{
@@ -80,7 +80,7 @@ return {
 		lazy = false,
 		config = function()
 			local highlights = require("nord").bufferline.highlights({
-				italic = true,
+				italic = false,
 				bold = true,
 			})
 
@@ -92,7 +92,7 @@ return {
 			})
 
 			-- Example config in lua
-			vim.g.nord_contrast = true
+			vim.g.nord_contrast = false
 			vim.g.nord_borders = true
 			vim.g.nord_disable_background = true
 			vim.g.nord_italic = false
@@ -100,8 +100,8 @@ return {
 			vim.g.nord_bold = true
 
 			-- Load the colorscheme
-			require("nord").set()
-			vim.cmd.colorscheme("nord")
+			-- require("nord").set()
+			-- vim.cmd.colorscheme("nord")
 		end,
 	},
 }
