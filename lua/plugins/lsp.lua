@@ -161,7 +161,11 @@ return {
 				},
 				setup = {
 					jdtls = function()
-						return true --avoid duplicate servers
+						return true
+					end,
+
+					rust_analyzer = function()
+						return true
 					end,
 				},
 			}
@@ -247,6 +251,8 @@ return {
 				"eslint_d",
 				--Markdown
 				"markdownlint",
+				--Rust
+				"rust_analyzer",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 			require("mason-lspconfig").setup({
@@ -256,9 +262,8 @@ return {
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
 						require("lspconfig")[server_name].setup(server)
 					end,
-					["jdtls"] = function()
-						return true
-					end,
+					["jdtls"] = function() end,
+					["rust_analyzer"] = function() end,
 				},
 			})
 		end,
