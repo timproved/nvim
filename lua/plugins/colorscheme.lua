@@ -51,18 +51,22 @@ return {
 					h6 = "foam",
 				},
 			})
-			-- vim.cmd("colorscheme rose-pine")
+			vim.cmd("colorscheme rose-pine-moon")
 		end,
 	},
 	{
 		"ellisonleao/gruvbox.nvim",
 		priority = 1000,
 		config = function()
+
 			-- Default options:
 			require("gruvbox").setup({
 				terminal_colors = false, -- add neovim terminal colors
 				undercurl = false,
 				underline = false,
+
+				italic = false,
+
 				bold = true,
 				italic = {
 					strings = true,
@@ -86,7 +90,9 @@ return {
 				dim_inactive = false,
 				transparent_mode = true,
 			})
+
 			vim.cmd("colorscheme gruvbox")
+
 		end,
 	},
 }
