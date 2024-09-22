@@ -91,7 +91,7 @@ return {
 						filetypes = { "markdown", "markdown.mdx" },
 					},
 					cssls = {},
-					tsserver = {
+					ts_ls = {
 						server_capabilities = {
 							documentFormattingProvider = false,
 						},
