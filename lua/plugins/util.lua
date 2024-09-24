@@ -1,13 +1,4 @@
 return {
-	-- Markdown Preview
-	{
-		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		ft = { "markdown" },
-		build = function()
-			vim.fn["mkdp#util#install"]()
-		end,
-	},
 	-- Mini Utils
 	{
 		"echasnovski/mini.nvim",
@@ -67,30 +58,30 @@ return {
 	},
 
 	--Python Venv Selector
-	{
-		"linux-cultist/venv-selector.nvim",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			"mfussenegger/nvim-dap",
-			"mfussenegger/nvim-dap-python", --optional
-			{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
-		},
-		lazy = "VeryLazy",
-		branch = "regexp", -- This is the regexp branch, use this for the new version
-		config = function()
-			require("venv-selector").setup({
-				name = { "venv", ".venv", "env", ".env" },
-				auto_refresh = false,
-				dap_enabled = true,
-			})
-		end,
-		keys = {
-			-- Keymap to open VenvSelector to pick a venv.
-			{ "<leader>vs", "<cmd>VenvSelect<cr>" },
-			-- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-			{ "<leader>vc", "<cmd>VenvSelectCached<cr>" },
-		},
-	},
+	-- {
+	-- 	"linux-cultist/venv-selector.nvim",
+	-- 	dependencies = {
+	-- 		"neovim/nvim-lspconfig",
+	-- 		"mfussenegger/nvim-dap",
+	-- 		"mfussenegger/nvim-dap-python", --optional
+	-- 		{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
+	-- 	},
+	-- 	lazy = "VeryLazy",
+	-- 	branch = "regexp", -- This is the regexp branch, use this for the new version
+	-- 	config = function()
+	-- 		require("venv-selector").setup({
+	-- 			name = { "venv", ".venv", "env", ".env" },
+	-- 			auto_refresh = false,
+	-- 			dap_enabled = true,
+	-- 		})
+	-- 	end,
+	-- 	keys = {
+	-- 		-- Keymap to open VenvSelector to pick a venv.
+	-- 		{ "<leader>vs", "<cmd>VenvSelect<cr>" },
+	-- 		-- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+	-- 		{ "<leader>vc", "<cmd>VenvSelectCached<cr>" },
+	-- 	},
+	-- },
 
 	-- ToggleTerm
 	{
@@ -119,18 +110,18 @@ return {
 	},
 
 	-- Flash
-	{
-		"folke/flash.nvim",
-		event = "VeryLazy",
-		---@type Flash.Config
-		opts = {},
-        -- stylua: ignore
-        keys = {
-            { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-            { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
-            { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
-            { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-            { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
-        },
-	},
+	-- {
+	-- 	"folke/flash.nvim",
+	-- 	event = "VeryLazy",
+	-- 	---@type Flash.Config
+	-- 	opts = {},
+	--        -- stylua: ignore
+	--        keys = {
+	--            { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+	--            { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+	--            { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+	--            { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+	--            { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+	--        },
+	-- },
 }
