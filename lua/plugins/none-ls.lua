@@ -33,19 +33,10 @@ return {
 				null_ls.builtins.formatting.black,
 				null_ls.builtins.diagnostics.mypy,
 				null_ls.builtins.formatting.isort,
-				--Java
-				-- null_ls.builtins.formatting.google_java_format.with({
-				-- 	extra_args = function(params)
-				-- 		return params.options
-				-- 			and params.options.tabSize
-				-- 			and {
-				-- 				"--tab-width",
-				-- 				params.options.tabSize,
-				-- 			}
-				-- 	end,
-				-- }),
+				-- Java
+				-- null_ls.builtins.formatting.google_java_format,
 				-- C / CPP
-				null_ls.builtins.formatting.clang_format,
+				-- null_ls.builtins.formatting.clang_format,
 			},
 		})
 		vim.keymap.set("n", "<leader>fo", vim.lsp.buf.format, { desc = "[F]ormat" })
