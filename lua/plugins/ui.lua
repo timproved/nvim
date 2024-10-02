@@ -8,7 +8,7 @@ return {
 			require("bufferline").setup({
 				options = {
 					mode = "buffers", -- set to "tabs" to only show tabpages instead
-					themable = true, -- allows highlight groups to be overriden i.e. sets highlights as default
+					themable = false, -- allows highlight groups to be overriden i.e. sets highlights as default
 					numbers = "none",
 					indicator = {
 						icon = "▎", -- this should be omitted if indicator style is not 'icon'
@@ -90,7 +90,7 @@ return {
 					move_wraps_at_ends = false, -- whether or not the move command "wraps" at the first or last position
 					-- can also be a table containing 2 custom separators
 					-- [focused and unfocused]. eg: { '|', '|' }
-					separator_style = "thin", -- | "slope" | "thick" | "thin" | { "any", "any" },
+					separator_style = "thick", -- | "slope" | "thick" | "thin" | { "any", "any" },
 					enforce_regular_tabs = false,
 					always_show_bufferline = true,
 					auto_toggle_bufferline = true,
@@ -99,7 +99,7 @@ return {
 						delay = 200,
 						reveal = { "close" },
 					},
-					sort_by = "insert_after_current",
+					sort_by = "insert_at_end",
 					-- | "insert_at_end"
 					-- | "id"
 					-- | "extension"
