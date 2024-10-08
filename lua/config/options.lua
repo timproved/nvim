@@ -1,5 +1,8 @@
 vim.g.bigfile_size = 1024 * 1024 * 1.5 -- 1.5 MB
 
+vim.g.maplocalleader = " "
+vim.g.mapleader = " "
+
 vim.opt.number = true -- display line numbersawdawdawdadw
 vim.opt.relativenumber = true -- display relative line numbers
 vim.opt.numberwidth = 2 -- set width of line number column

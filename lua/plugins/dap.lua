@@ -7,7 +7,7 @@ return {
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",
 			"jay-babu/mason-nvim-dap.nvim",
-
+			"shunsambongi/neotest-testthat",
 			-- Add your own debuggers here:
 			"mfussenegger/nvim-dap-python",
 		},
@@ -61,6 +61,7 @@ return {
 					-- runner = "pytest",
 					-- python = ".venv/bin/python",
 				},
+				["neotest-testhat"] = {},
 			},
 		},
 	},

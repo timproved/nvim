@@ -22,6 +22,8 @@ return {
 					"javascript",
 					"typescript",
 					"go",
+                    "r",
+                    "rnoweb",
 				},
 				-- Autoinstall languages that are not installed
 				auto_install = true,

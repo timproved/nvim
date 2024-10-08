@@ -40,8 +40,8 @@ return {
     -- Markdown 
     {
     "OXY2DEV/markview.nvim",
-    lazy = false,      -- Recommended
-    -- ft = "markdown" -- If you decide to lazy-load anyway
+    -- lazy = false,      -- Recommended
+    ft = "markdown",
 
     dependencies = {
         "nvim-treesitter/nvim-treesitter",
