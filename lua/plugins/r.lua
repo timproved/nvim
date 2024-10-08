@@ -1,8 +1,8 @@
 return {
 	{
 		"R-nvim/R.nvim",
-		ft = { "r", "rmd" },
 		lazy = false,
+		filetypes = { "r", "rmd", "quarto" },
 		version = "~0.1.0",
 		config = function()
 			local opts = {
@@ -35,6 +35,7 @@ return {
 				-- auto_quit = true,
 				min_editor_width = 72,
 				rconsole_width = 78,
+                auto_quit = true
 			}
 			-- Check if the environment variable "R_AUTO_START" exists.
 			-- If using fish shell, you could put in your config.fish:
@@ -45,15 +46,5 @@ return {
 			end
 			require("r").setup(opts)
 		end,
-	},
-	{
-		"R-nvim/cmp-r",
-		{
-			"hrsh7th/nvim-cmp",
-			config = function()
-				require("cmp").setup({ sources = { { name = "cmp_r" } } })
-				require("cmp_r").setup({})
-			end,
-		},
 	},
 }
