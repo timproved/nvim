@@ -15,12 +15,10 @@ This Neovim Configs Goals are:
 * **Java** This configs primary goal is to deliver an IntelliJ like feature support for Java programming
 at the speed and responsiveness of Neovim
 
-## What this config is doing well enough
+## Robust Support for the following Languages / Technologies
 
 * **Python**
 * **R**
 * **Typescript**
 * **C/C++**
 * **Rust**
-* **Python**
-
