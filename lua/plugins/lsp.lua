@@ -85,6 +85,7 @@ return {
 						filetypes = { "r", "rmd" },
 						flags = { debounce_text_changes = 150 },
 					},
+					pyright = {},
 					bashls = {},
 					dockerls = {},
 					tailwindcss = {
@@ -163,15 +164,6 @@ return {
 							clangdFileStatus = true,
 						},
 					},
-				},
-				setup = {
-					jdtls = function()
-						return true
-					end,
-
-					rust_analyzer = function()
-						return true
-					end,
 				},
 			}
 		end,

@@ -68,6 +68,8 @@ return {
 				sources = {
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
+					{ name = "cmp_r" },
+					{ name = "otter" },
 					{ name = "buffer" },
 					{ name = "path" },
 				},
@@ -80,11 +82,16 @@ return {
 					}),
 				},
 			})
-			require("cmp").setup.filetype({ "r", "rmd", "quarto", "rnoweb", "rhelp" }, {
-				sources = {
-					{ name = "cmp_r" },
-				},
-			})
+			-- require("cmp").setup.filetype({ "r", "rmd", "rnoweb", "rhelp" }, {
+			-- 	sources = {
+			-- 		{ name = "cmp_r" },
+			-- 	},
+			-- })
+			-- require("cmp").setup.filetype({ "quarto", "python" }, {
+			-- 	sources = {
+			-- 		{ name = "otter" },
+			-- 	},
+			-- })
 			-- require("cmp").setup({
 			-- 	enabled = function()
 			-- 		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()

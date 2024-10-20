@@ -51,18 +51,22 @@ return {
 		dependencies = {
 			"nvim-neotest/nvim-nio",
 			"nvim-lua/plenary.nvim",
-			"antoinemadec/FixCursorHold.nvim",
 			"nvim-treesitter/nvim-treesitter",
 		},
-		opts = {
-			adapters = {
-				["neotest-python"] = {
-					-- Here you can specify the settings for the adapter, i.e.
-					-- runner = "pytest",
-					-- python = ".venv/bin/python",
+		config = function()
+			require("neotest").setup({
+				vim.keymap.set("n", "<leader>tr", function()
+					require("neotest").run.run()
+				end, { desc = "Run Test" }),
+				adapters = {
+					["neotest-python"] = {
+						-- Here you can specify the settings for the adapter, i.e.
+						-- runner = "pytest",
+						-- python = ".venv/bin/python",
+					},
+					["neotest-testhat"] = {},
 				},
-				["neotest-testhat"] = {},
-			},
-		},
+			})
+		end,
 	},
 }

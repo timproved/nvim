@@ -34,3 +34,10 @@ vim.keymap.set("t", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = tru
 vim.keymap.set("t", "<C-j>", "<C-w>j", { desc = "Go to Left Window", remap = true })
 vim.keymap.set("t", "<C-k>", "<C-w>k", { desc = "Go to Left Window", remap = true })
 vim.keymap.set("t", "<C-l>", "<C-w>j", { desc = "Go to Left Window", remap = true })
+--Disabling stuff
+vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set("n", "<S-k>", '<cmd>echo "wrong!"<CR>')
+vim.keymap.set("n", "<S-j>", '<cmd>echo "wrong!"<CR>')

@@ -4,8 +4,9 @@
 
 This Neovim Configs Goals are:
 
-* Support Workflows I indulge in regularly exceptional well 
-* Support Workflows I indulge in seldomly well enough so it doesn't cause frustration
+* Deliver great support for frequently used workflows
+* Deliver good support for semi-frequently used workflows
+* Deliver a frustration free experience for infrequently used workflows
 * Keep modularity to make adding support for new workflows or throwing out old ones easy
 * Keep the config lightweight and responsive
 * Maintain a Config that embraces Neovim's core philosophy and capabilities
@@ -17,8 +18,16 @@ at the speed and responsiveness of Neovim
 
 ## Robust Support for the following Languages / Technologies
 
-* **Python**
-* **R**
+* **Python and Jupyter Notebooks**
+* **R and R-Markdown**
 * **Typescript**
 * **C/C++**
 * **Rust**
+
+### Aditional Support for the following Technologies
+
+* **Dockerfiles and Docker-Compose**
+* **Bash-Scripting**
+* **html/css**
+
+
