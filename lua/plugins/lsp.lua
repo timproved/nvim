@@ -209,6 +209,13 @@ return {
 					map("gk", vim.lsp.buf.signature_help, "Signature Help")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					map("gl", vim.diagnostic.open_float, "View Float for Diagnostics")
+					-- Diagnostic keymaps
+					vim.keymap.set(
+						"n",
+						"<leader>q",
+						vim.diagnostic.setloclist,
+						{ desc = "Open diagnostic [Q]uickfix list" }
+					)
 
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
 						local highlight_augroup =

@@ -101,8 +101,11 @@ return {
 		config = function()
 			require("toggleterm").setup({
 				open_mapping = [[<C-t>]],
+				size = vim.o.columns * 0.4,
 				close_on_exit = false,
 				shell = vim.o.shell,
+				shade_terminals = false,
+				direction = "vertical",
 			})
 			function _G.set_terminal_keymaps()
 				local opts = { buffer = 0 }
