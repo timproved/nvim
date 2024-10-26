@@ -49,6 +49,17 @@ return {
 			},
 		},
 	},
+
+	-- Fugitive
+	{
+		"tpope/vim-fugitive",
+	},
+
+	-- Diff-View
+	{
+		"sindrets/diffview.nvim",
+	},
+
 	-- Trouble
 	{
 		"folke/trouble.nvim",
