@@ -85,7 +85,6 @@ return {
 						filetypes = { "r", "rmd" },
 						flags = { debounce_text_changes = 150 },
 					},
-					pyright = {},
 					bashls = {},
 					dockerls = {},
 					tailwindcss = {
@@ -100,6 +99,9 @@ return {
 					ts_ls = {
 						server_capabilities = {
 							documentFormattingProvider = false,
+						},
+						init_options = {
+							disableSuggestions = true,
 						},
 					},
 					jsonls = {
@@ -164,6 +166,21 @@ return {
 							clangdFileStatus = true,
 						},
 					},
+					basedpyright = {
+						settings = {
+							pyright = {
+								-- Using Ruff's import organizer
+								disableOrganizeImports = true,
+							},
+							python = {
+								analysis = {
+									-- Ignore all files for analysis to exclusively use Ruff for linting
+									ignore = { "*" },
+								},
+							},
+						},
+					},
+					ruff_lsp = {},
 				},
 			}
 		end,
@@ -210,12 +227,12 @@ return {
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					map("gl", vim.diagnostic.open_float, "View Float for Diagnostics")
 					-- Diagnostic keymaps
-					vim.keymap.set(
-						"n",
-						"<leader>q",
-						vim.diagnostic.setloclist,
-						{ desc = "Open diagnostic [Q]uickfix list" }
-					)
+					-- vim.keymap.set(
+					-- 	"n",
+					-- 	"<leader>q",
+					-- 	vim.diagnostic.setloclist,
+					-- 	{ desc = "Open diagnostic [Q]uickfix list" }
+					-- )
 
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
 						local highlight_augroup =
@@ -266,12 +283,12 @@ return {
 				"java-test",
 				"google-java-format",
 				--Python
-				"pyright",
+				"basedpyright",
+				"ruff_lsp",
 				"debugpy",
-				"mypy",
-				"ruff-lsp",
+				-- "mypy",
 				"black",
-				"isort",
+				-- "isort",
 				--Web
 				"html-lsp",
 				"prettierd",
@@ -291,6 +308,21 @@ return {
 					end,
 					["jdtls"] = function() end,
 					["rust_analyzer"] = function() end,
+					-- ["basedpyright"] = function()
+					-- 	settings = {
+					-- 		basedpyright = {
+					-- 			-- Using Ruff's import organizer
+					-- 			disableOrganizeImports = true,
+					-- 		},
+					-- 		python = {
+					-- 			analysis = {
+					-- 				-- Ignore all files for analysis to exclusively use Ruff for linting
+					-- 				ignore = { "*" },
+					-- 			},
+					-- 		},
+					-- 	}
+					-- end,
+					-- ["ruff_lsp"] = function() end,
 				},
 			})
 		end,
