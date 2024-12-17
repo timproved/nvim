@@ -80,11 +80,11 @@ return {
 							},
 						},
 					},
-					r_language_server = {
-						cmd = { "R", "--no-echo", "-e", "languageserver::run()" },
-						filetypes = { "r", "rmd" },
-						flags = { debounce_text_changes = 150 },
-					},
+					-- r_language_server = {
+					--     cmd = { "R", "--no-echo", "-e", "languageserver::run()" },
+					--     filetypes = { "r", "rmd" },
+					--     flags = { debounce_text_changes = 150 },
+					-- },
 					bashls = {},
 					dockerls = {},
 					tailwindcss = {
@@ -180,7 +180,7 @@ return {
 							},
 						},
 					},
-					ruff_lsp = {},
+					texlab = {},
 				},
 			}
 		end,
@@ -284,11 +284,8 @@ return {
 				"google-java-format",
 				--Python
 				"basedpyright",
-				"ruff_lsp",
+				"ruff",
 				"debugpy",
-				-- "mypy",
-				"black",
-				-- "isort",
 				--Web
 				"html-lsp",
 				"prettierd",
@@ -297,6 +294,7 @@ return {
 				"markdownlint",
 				--Rust
 				"rust_analyzer",
+				"codelldb",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 			require("mason-lspconfig").setup({
@@ -308,21 +306,6 @@ return {
 					end,
 					["jdtls"] = function() end,
 					["rust_analyzer"] = function() end,
-					-- ["basedpyright"] = function()
-					-- 	settings = {
-					-- 		basedpyright = {
-					-- 			-- Using Ruff's import organizer
-					-- 			disableOrganizeImports = true,
-					-- 		},
-					-- 		python = {
-					-- 			analysis = {
-					-- 				-- Ignore all files for analysis to exclusively use Ruff for linting
-					-- 				ignore = { "*" },
-					-- 			},
-					-- 		},
-					-- 	}
-					-- end,
-					-- ["ruff_lsp"] = function() end,
 				},
 			})
 		end,

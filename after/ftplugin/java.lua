@@ -10,17 +10,17 @@ local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = vim.fn.stdpath("data") .. "/site/java/workspace-root/" .. project_name
 
 -- Needed for debugging
-local bundles = {
-	vim.fn.glob(
-		vim.env.HOME .. "/.local/share/nvim/mason/share/java-debug-adapter/com.microsoft.java.debug.plugin.jar"
-	),
-}
---
--- -- Needed for running/debugging unit tests
-vim.list_extend(
-	bundles,
-	vim.split(vim.fn.glob(vim.env.HOME .. "/.local/share/nvim/mason/share/java-test/*.jar", 1), "\n")
-)
+-- local bundles = {
+-- 	vim.fn.glob(
+-- 		vim.env.HOME .. "/.local/share/nvim/mason/share/java-debug-adapter/com.microsoft.java.debug.plugin.jar"
+-- 	),
+-- }
+-- --
+-- -- -- Needed for running/debugging unit tests
+-- vim.list_extend(
+-- 	bundles,
+-- 	vim.split(vim.fn.glob(vim.env.HOME .. "/.local/share/nvim/mason/share/java-test/*.jar", 1), "\n")
+-- )
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
@@ -61,13 +61,9 @@ local config = {
 				updateBuildConfiguration = "interactive",
 				runtimes = {
 					{
-						name = "JavaSE-17",
-						path = "/usr/lib/jvm/java-17-openjdk/",
+						name = "JavaSE-21",
+						path = "/home/tim/.sdkman/candidates/java/current/",
 					},
-					-- {
-					-- 	name = "JavaSE-21",
-					-- 	path = "/usr/lib/jvm/java-21-openjdk/",
-					-- },
 				},
 			},
 			maven = {
@@ -108,7 +104,7 @@ local config = {
 		},
 	},
 	init_options = {
-		bundles = bundles,
+		-- bundles = bundles,
 		extendedClientCapabilities = extendedClientCapabilities,
 	},
 }

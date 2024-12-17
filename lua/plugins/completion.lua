@@ -82,6 +82,7 @@ return {
 					}),
 				},
 			})
+
 			-- require("cmp").setup.filetype({ "r", "rmd", "rnoweb", "rhelp" }, {
 			-- 	sources = {
 			-- 		{ name = "cmp_r" },

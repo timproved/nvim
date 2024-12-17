@@ -65,6 +65,7 @@ return {
 						-- python = ".venv/bin/python",
 					},
 					["neotest-testhat"] = {},
+					["rustaceanvim.neotest"] = {},
 				},
 			})
 		end,
