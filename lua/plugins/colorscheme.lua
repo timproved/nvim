@@ -7,7 +7,16 @@ return {
 		-- you can set set configuration options here
 		config = function()
 			vim.g.zenbones_darken_comments = 45
-			vim.cmd("colorscheme zenbones")
+			-- vim.cmd("colorscheme zenbones")
+		end,
+	},
+	{
+		"RRethy/base16-nvim",
+		lazy = false,
+		priority = 1000,
+		-- you can set set configuration options here
+		config = function()
+			vim.cmd("colorscheme base16-rose-pine")
 		end,
 	},
 }
