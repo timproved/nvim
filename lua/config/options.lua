@@ -10,6 +10,7 @@ vim.opt.signcolumn = "yes" -- always show sign column
 vim.opt.wrap = false -- display lines as single line
 vim.opt.scrolloff = 15 -- number of lines to keep above/below curso
 vim.opt.sidescrolloff = 8 -- number of columns to keep to the left/right of cursor
+vim.opt.cursorline = true
 
 vim.opt.expandtab = true -- convert tabs to spaces
 vim.opt.shiftwidth = 4 -- number of spaces inserted for each indentation level
