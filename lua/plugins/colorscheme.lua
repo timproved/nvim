@@ -10,13 +10,4 @@ return {
 			vim.cmd("colorscheme rosebones")
 		end,
 	},
-	{
-		"RRethy/base16-nvim",
-		lazy = false,
-		priority = 1000,
-		-- you can set set configuration options here
-		config = function()
-			-- vim.cmd("colorscheme base16-rose-pine")
-		end,
-	},
 }

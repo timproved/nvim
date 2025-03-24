@@ -72,8 +72,8 @@ return {
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "[S]earch [N]eovim files" })
 			-- Shortcut for searching your notes
-			vim.keymap.set("n", "<leader>sv", function()
-				builtin.find_files({ cwd = "~/vault" })
+			vim.keymap.set("n", "<leader>so", function()
+				builtin.find_files({ cwd = "~/obsidian" })
 			end, { desc = "[S]earch [V]ault" })
 		end,
 	},
