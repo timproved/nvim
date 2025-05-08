@@ -1,8 +1,10 @@
 local status, jdtls = pcall(require, "jdtls")
+
 if not status then
 	vim.notify("jdtls not found", vim.log.levels.ERROR)
 	return
 end
+
 local home = os.getenv("HOME")
 local os_config = "linux"
 
@@ -15,15 +17,13 @@ local bundles = {
 		vim.env.HOME .. "/.local/share/nvim/mason/share/java-debug-adapter/com.microsoft.java.debug.plugin.jar"
 	),
 }
--- --
--- -- -- Needed for running/debugging unit tests
 vim.list_extend(
 	bundles,
 	vim.split(vim.fn.glob(vim.env.HOME .. "/.local/share/nvim/mason/share/java-test/*.jar", 1), "\n")
 )
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+local client_capab = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require("blink.cmp").get_lsp_capabilities(client_capab)
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
@@ -183,17 +183,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 	end,
 })
-
--- config.on_attach = function(client, bufnr)
--- 	local _, _ = pcall(vim.lsp.codelens.refresh)
--- 	require("jdtls").setup_dap({ hotcodereplace = "auto" })
--- 	-- Comment out the following line if you don't want intellij like inlay hints
--- 	vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
--- 	local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
--- 	if status_ok then
--- 		jdtls_dap.setup_dap_main_class_configs()
--- 	end
--- end
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	pattern = { "*.java" },
