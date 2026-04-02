@@ -4,39 +4,58 @@
 --- Tailwind CSS Language Server can be installed via npm:
 ---
 --- npm install -g @tailwindcss/language-server
-local util = require("vim.lsp.util")
 
-local function find_tailwind_global_css()
-	local target = "@import 'tailwindcss';"
+local config_files = {
+	"tailwind.config.js",
+	"tailwind.config.cjs",
+	"tailwind.config.mjs",
+	"tailwind.config.ts",
+	"postcss.config.js",
+	"postcss.config.cjs",
+	"postcss.config.mjs",
+	"postcss.config.ts",
+}
 
-	-- Find project root using `.git`
-	local buf = vim.api.nvim_get_current_buf()
-	local root = vim.fs.root(buf, function(name)
-		return name == ".git"
-	end)
-
-	if not root then
-		return nil -- no project root found
+local function read_package_json(path)
+	local ok, lines = pcall(vim.fn.readfile, path)
+	if not ok then
+		return nil
 	end
 
-	-- Find stylesheet files in the project root (recursively)
-	local files = vim.fs.find(function(name)
-		return name:match("%.css$") or name:match("%.scss$") or name:match("%.pcss$")
-	end, {
-		path = root,
-		type = "file",
-		limit = math.huge, -- search full tree
-	})
+	local ok_decode, package = pcall(vim.json.decode, table.concat(lines, "\n"))
+	if not ok_decode or type(package) ~= "table" then
+		return nil
+	end
 
-	for _, path in ipairs(files) do
-		local content = vim.fn.readblob(path)
+	return package
+end
 
-		if content:find(target, 1, true) then
-			return path -- return first match
+local function has_tailwind_dependency(package)
+	local dependencies = type(package.dependencies) == "table" and package.dependencies or {}
+	local dev_dependencies = type(package.devDependencies) == "table" and package.devDependencies or {}
+
+	return dependencies.tailwindcss ~= nil or dev_dependencies.tailwindcss ~= nil
+end
+
+local function find_tailwind_package_root(path)
+	local dir = vim.fs.dirname(path)
+
+	while dir and dir ~= "" do
+		local package_json = dir .. "/package.json"
+		if vim.uv.fs_stat(package_json) then
+			local package = read_package_json(package_json)
+			if package and has_tailwind_dependency(package) then
+				return dir
+			end
 		end
-	end
 
-	return nil
+		local parent = vim.fs.dirname(dir)
+		if not parent or parent == dir then
+			return nil
+		end
+
+		dir = parent
+	end
 end
 
 ---@type vim.lsp.Config
@@ -99,13 +118,6 @@ return {
 		"svelte",
 		"templ",
 	},
-	capabilities = {
-		workspace = {
-			didChangeWatchedFiles = {
-				dynamicRegistration = true,
-			},
-		},
-	},
 	---@type vim.lsp.settings.tailwindcss
 	settings = {
 		tailwindCSS = {
@@ -146,35 +158,21 @@ return {
 		if not config.settings.editor.tabSize then
 			config.settings.editor.tabSize = vim.lsp.util.get_effective_tabstop()
 		end
-		config.settings.tailwindCSS = config.settings.tailwindCSS or {}
-		config.settings.tailwindCSS.experimental = config.settings.tailwindCSS.experimental or {}
-		config.settings.tailwindCSS.experimental.configFile = config.settings.tailwindCSS.experimental.configFile
-			or find_tailwind_global_css()
 	end,
 	workspace_required = true,
 	root_dir = function(bufnr, on_dir)
-		local root_files = {
-			-- Generic
-			"tailwind.config.js",
-			"tailwind.config.cjs",
-			"tailwind.config.mjs",
-			"tailwind.config.ts",
-			"postcss.config.js",
-			"postcss.config.cjs",
-			"postcss.config.mjs",
-			"postcss.config.ts",
-			-- Django
-			"theme/static_src/tailwind.config.js",
-			"theme/static_src/tailwind.config.cjs",
-			"theme/static_src/tailwind.config.mjs",
-			"theme/static_src/tailwind.config.ts",
-			"theme/static_src/postcss.config.js",
-			-- Fallback for tailwind v4, where tailwind.config.* is not required anymore
-			".git",
-		}
 		local fname = vim.api.nvim_buf_get_name(bufnr)
-		root_files = util.insert_package_json(root_files, "tailwindcss", fname)
-		root_files = util.root_markers_with_field(root_files, { "mix.lock", "Gemfile.lock" }, "tailwind", fname)
-		on_dir(vim.fs.dirname(vim.fs.find(root_files, { path = fname, upward = true })[1]))
+		if fname == "" then
+			return
+		end
+
+		local config_file = vim.fs.find(config_files, { path = fname, upward = true, type = "file", limit = 1 })[1]
+		if config_file then
+			on_dir(vim.fs.dirname(config_file))
+			return
+		end
+
+		-- Fallback for Tailwind projects that rely on package.json without a dedicated config file.
+		on_dir(find_tailwind_package_root(fname))
 	end,
 }
