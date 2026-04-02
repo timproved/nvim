@@ -1,14 +1,37 @@
 local registry = require("config.registry")
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('my.lsp', {}),
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("my.lsp", {}),
   callback = function(ev)
     local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-    if client:supports_method('textDocument/implementation') then
+
+    local map = vim.keymap.set
+    local opts = { buffer = ev.buf, noremap = true, silent = true }
+
+    -- Navigation
+    map("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+    map("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
+    map("n", "gtd", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Go to type definition" }))
+    map("n", "gri", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
+    map("n", "grr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Go to references" }))
+
+    -- Info
+    map("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover documentation" }))
+    map({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Signature help" }))
+
+    -- Actions
+    map("n", "grn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
+    map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
+
+    -- Symbols
+    map("n", "gO", vim.lsp.buf.document_symbol, vim.tbl_extend("force", opts, { desc = "Document symbols" }))
+
+    if client:supports_method("textDocument/implementation") then
       -- Create a keymap for vim.lsp.buf.implementation ...
     end
+
     -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
-    if client:supports_method('textDocument/completion') then
+    if client:supports_method("textDocument/completion") then
       -- Optional: trigger autocompletion on EVERY keypress. May be slow!
       -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
       -- client.server_capabilities.completionProvider.triggerCharacters = chars
@@ -16,10 +39,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
     -- Auto-format ("lint") on save.
     -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
-    if not client:supports_method('textDocument/willSaveWaitUntil')
-        and client:supports_method('textDocument/formatting') then
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+    if
+        not client:supports_method("textDocument/willSaveWaitUntil")
+        and client:supports_method("textDocument/formatting")
+    then
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
         buffer = ev.buf,
         callback = function()
           vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
@@ -29,20 +54,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-local default_capabilities = vim.deepcopy((vim.lsp.config['*'] or {}).capabilities or {})
-local capabilities = vim.tbl_deep_extend('force', default_capabilities, {
-  textDocument = {
-    semanticTokens = {
-      multilineTokenSupport = true,
+vim.lsp.config("*", {
+  capabilities = {
+    textDocument = {
+      semanticTokens = {
+        multilineTokenSupport = true,
+      },
     },
   },
+  root_markers = { ".git" },
 })
-
-
-vim.lsp.config('*', {
-  capabilities = capabilities,
-  root_markers = { '.git' },
-})
-
 
 vim.lsp.enable(registry.servers)
