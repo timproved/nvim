@@ -27,6 +27,8 @@ M.servers = {
   "json-lsp",
   "yamlls",
   -- "nginx_language_server", -- This is not available for python 3.13, thus skipping for now
+  -- Java
+  "jdtls",
   -- COBOL
   "cobol_ls",
   -- Academic
@@ -53,8 +55,7 @@ M.mason_overrides = {
 M.extra_tools = {
   -- CPP
   "clang-format",
-  -- Java
-  "jdtls",
+  -- Java (jdtls moved to servers)
   "java-debug-adapter",
   "java-test",
   "google-java-format",

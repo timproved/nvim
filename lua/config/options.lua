@@ -8,7 +8,7 @@ opt.relativenumber = true -- Relative line numbers
 opt.cursorline = true     -- Highlight current line
 opt.wrap = false          -- Don't wrap lines
 opt.scrolloff = 10        -- Keep 10 lines above/below cursor
-opt.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
+opt.sidescrolloff = 30    -- Keep 8 columns left/right of cursor
 
 -- Indentation
 opt.tabstop = 2        -- Tab width
@@ -32,7 +32,7 @@ opt.showmatch = true      -- Highlight matching brackets
 opt.matchtime = 2         -- How long to show matching bracket
 opt.cmdheight = 1         -- Command line height
 opt.showmode = false      -- Don't show mode in command line
-opt.pumheight = 10        -- Popup menu height
+opt.pumheight = 20        -- Popup menu height
 opt.pumblend = 10         -- Popup menu transparency
 opt.winblend = 0          -- Floating window transparency
 opt.completeopt = "menu,menuone,noselect"
