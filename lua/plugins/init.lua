@@ -1,0 +1,6 @@
+require("plugins.telescope")
+require("plugins.treesitter")
+require("plugins.blink")
+require("plugins.oil")
+require("plugins.mason")
+require("plugins.schemastore")
