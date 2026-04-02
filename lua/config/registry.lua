@@ -64,6 +64,8 @@ M.extra_tools = {
   "ktlint",
   -- Markdown
   "markdownlint",
+  -- Misc
+  "hadolint",
 }
 
 return M
