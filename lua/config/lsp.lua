@@ -27,20 +27,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Symbols
     map("n", "gO", vim.lsp.buf.document_symbol, vim.tbl_extend("force", opts, { desc = "Document symbols" }))
 
-    vim.api.nvim_create_autocmd("LspProgress", {
-      buffer = buf,
-      callback = function(buf)
-        local value = ev.data.params.value
-        vim.api.nvim_echo({ { value.message or "done" } }, false, {
-          id = "lsp." .. ev.data.client_id,
-          kind = "progress",
-          source = "vim.lsp",
-          title = value.title,
-          status = value.kind ~= "end" and "running" or "success",
-          percent = value.percentage,
-        })
-      end,
-    })
     -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
     if client:supports_method("textDocument/completion") then
       -- Optional: trigger autocompletion on EVERY keypress. May be slow!
@@ -66,6 +52,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if client:supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspProgress", {
+  group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
+  callback = function(args)
+    local value = args.data.params.value
+    require("config.lsp_progress").update(args.data.client_id, value)
   end,
 })
 
