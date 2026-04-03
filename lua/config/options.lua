@@ -134,3 +134,9 @@ vim.filetype.add({
     ["%.env%.[%w_.-]+"] = "dotenv",
   },
 })
+
+-- Make help appear in new tab instead of vertical split
+vim.cmd([[
+  cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'tab help' : 'h'
+  cnoreabbrev <expr> help getcmdtype() == ':' && getcmdline() == 'help' ? 'tab help' : 'help'
+]])
