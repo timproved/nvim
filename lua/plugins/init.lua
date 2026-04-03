@@ -1,5 +1,4 @@
 require("plugins.blink")
-require("plugins.colorizer")
 require("plugins.colorscheme")
 require("plugins.comments")
 require("plugins.git")

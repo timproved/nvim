@@ -42,3 +42,12 @@ require("mini.pairs").setup({
   -- better deal with markdown code blocks
   markdown = true,
 })
+
+require("mini.statusline").setup({
+  use_icons = true,
+  laststatus = 3,
+  set_vim_settings = false,
+  section_location = function()
+    return "%2l:%-2v"
+  end,
+})
