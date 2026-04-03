@@ -97,18 +97,19 @@ opt.maxmempattern = 20000
 -- Create undo directory if it doesn't exist
 local undodir = vim.fn.expand("~/.vim/undodir")
 if vim.fn.isdirectory(undodir) == 0 then
-	vim.fn.mkdir(undodir, "p")
+  vim.fn.mkdir(undodir, "p")
 end
 
 vim.g.autoformat = true
-vim.g.inlay_hints = false
+vim.g.inlay_hints = true
+vim.g.codelens = false
 vim.g.trouble_lualine = true
 
 opt.fillchars = {
-	fold = " ",
-	foldsep = " ",
-	diff = "╱",
-	eob = " ",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
 }
 
 opt.jumpoptions = "view"
@@ -121,15 +122,15 @@ opt.shiftwidth = 2    -- Size of an indent
 vim.g.markdown_recommended_style = 0
 
 vim.filetype.add({
-	extension = {
-		env = "dotenv",
-	},
-	filename = {
-		[".env"] = "dotenv",
-		["env"] = "dotenv",
-	},
-	pattern = {
-		["[jt]sconfig.*.json"] = "jsonc",
-		["%.env%.[%w_.-]+"] = "dotenv",
-	},
+  extension = {
+    env = "dotenv",
+  },
+  filename = {
+    [".env"] = "dotenv",
+    ["env"] = "dotenv",
+  },
+  pattern = {
+    ["[jt]sconfig.*.json"] = "jsonc",
+    ["%.env%.[%w_.-]+"] = "dotenv",
+  },
 })
