@@ -64,7 +64,7 @@ opt.errorbells = false      -- No error bells
 opt.autochdir = false       -- Don't auto change directory
 opt.iskeyword:append("-")   -- Treat dash as part of word
 opt.path:append("**")       -- include subdirectories in search
-opt.selection = "exclusive" -- Selection behavior
+opt.selection = "inclusive" -- Selection behavior (exclusive breaks snippet placeholders)
 opt.mouse = "a"             -- Enable mouse support
 opt.modifiable = true       -- Allow buffer modifications
 opt.encoding = "UTF-8"      -- Set encoding
