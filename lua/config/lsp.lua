@@ -27,8 +27,40 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- Symbols
 		map("n", "gO", vim.lsp.buf.document_symbol, vim.tbl_extend("force", opts, { desc = "Document symbols" }))
 
-		if client:supports_method("textDocument/implementation") then
-			-- Create a keymap for vim.lsp.buf.implementation ...
+		-- Inlay hints toggle
+		vim.keymap.set("n", "<leader>th", function()
+			vim.g.inlay_hints = not vim.g.inlay_hints
+			vim.lsp.inlay_hint.enable(vim.g.inlay_hints)
+			vim.notify("Inlay hints " .. (vim.g.inlay_hints and "enabled" or "disabled"))
+		end, { desc = "Toggle inlay hints" })
+
+		if client:supports_method("textDocument/inlayHint") then
+			if vim.g.inlay_hints then
+				vim.defer_fn(function()
+					if vim.api.nvim_buf_is_valid(ev.buf) then
+						vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+					end
+				end, 500)
+			end
+
+			vim.api.nvim_create_autocmd("InsertEnter", {
+				group = vim.api.nvim_create_augroup("my.lsp.inlay_hints", { clear = false }),
+				buffer = ev.buf,
+				callback = function()
+					if vim.g.inlay_hints then
+						vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
+					end
+				end,
+			})
+			vim.api.nvim_create_autocmd("InsertLeave", {
+				group = vim.api.nvim_create_augroup("my.lsp.inlay_hints", { clear = false }),
+				buffer = ev.buf,
+				callback = function()
+					if vim.g.inlay_hints then
+						vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+					end
+				end,
+			})
 		end
 
 		-- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|

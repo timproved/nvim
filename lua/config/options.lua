@@ -101,6 +101,7 @@ if vim.fn.isdirectory(undodir) == 0 then
 end
 
 vim.g.autoformat = true
+vim.g.inlay_hints = false
 vim.g.trouble_lualine = true
 
 opt.fillchars = {

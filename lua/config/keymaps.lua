@@ -27,11 +27,11 @@ map("v", ">", ">gv")
 -- vim.pack keymaps
 map("n", "<leader>pu", "<cmd>lua vim.pack.update()<CR>")
 map("n", "<leader>pd", function()
-vim.ui.input({ prompt = "Plugin name to delete: " }, function(input)
-if input and input ~= "" then
-pcall(vim.pack.del, { input })
-end
-end)
+	vim.ui.input({ prompt = "Plugin name to delete: " }, function(input)
+		if input and input ~= "" then
+			pcall(vim.pack.del, { input })
+		end
+	end)
 end, { desc = "Delete Plugin" })
 vim.g.mapleader = " "
 -- Move to window using the <ctrl> hjkl keys
@@ -78,10 +78,33 @@ vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 vim.keymap.set("n", "<S-j>", '<cmd>echo "wrong!"<CR>')
 
 -- Show all diagnostics on current line in floating window
-vim.keymap.set("n", "<leader>q", ":lua vim.diagnostic.open_float()<CR>", { noremap = true, silent = true })
--- Go to next diagnostic (if there are multiple on the same line, only shows
--- one at a time in the floating window)
-vim.keymap.set("n", "<Leader>n", ":lua vim.diagnostic.goto_next()<CR>", { noremap = true, silent = true })
--- Go to prev diagnostic (if there are multiple on the same line, only shows
--- one at a time in the floating window)
-vim.keymap.set("n", "<Leader>p", ":lua vim.diagnostic.goto_prev()<CR>", { noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"<leader>q",
+	vim.diagnostic.open_float,
+	{ noremap = true, silent = true, desc = "Line diagnostics float" }
+)
+-- Go to next/prev diagnostic (updated to vim.diagnostic.jump for 0.12.0)
+vim.keymap.set("n", "<Leader>n", function()
+	vim.diagnostic.jump({ count = 1 })
+end, { noremap = true, silent = true, desc = "Next diagnostic" })
+vim.keymap.set("n", "<Leader>p", function()
+	vim.diagnostic.jump({ count = -1 })
+end, { noremap = true, silent = true, desc = "Prev diagnostic" })
+
+-- Buffer diagnostics to quickfix list
+vim.keymap.set("n", "<leader>db", function()
+	local diagnostics = vim.diagnostic.get(0)
+	local items = vim.diagnostic.toqflist(diagnostics)
+	vim.fn.setqflist({}, " ", { title = "Buffer Diagnostics", items = items })
+	vim.cmd("copen")
+end, { noremap = true, silent = true, desc = "Buffer diagnostics to quickfix" })
+
+-- Workspace diagnostics to quickfix list
+vim.keymap.set("n", "<leader>dw", function()
+	vim.diagnostic.setqflist({ open = true, title = "Workspace Diagnostics" })
+end, { noremap = true, silent = true, desc = "Workspace diagnostics to quickfix" })
+
+-- Quickfix navigation
+vim.keymap.set("n", "]q", "<cmd>cnext<cr>zz", { desc = "Next quickfix item" })
+vim.keymap.set("n", "[q", "<cmd>cprev<cr>zz", { desc = "Prev quickfix item" })
