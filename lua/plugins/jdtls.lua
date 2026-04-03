@@ -74,3 +74,14 @@ vim.lsp.config("jdtls", {
     bundles = get_bundles(),
   },
 })
+
+-- jdtls does not advertise inlayHintProvider in its initial serverCapabilities
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("my.jdtls", {}),
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client.name == "jdtls" then
+      vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+    end
+  end,
+})
