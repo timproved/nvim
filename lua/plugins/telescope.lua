@@ -1,49 +1,54 @@
 vim.pack.add({
-	{ src = "https://github.com/aznhe21/actions-preview.nvim" },
-	{ src = "https://github.com/nvim-telescope/telescope.nvim"},
-	{ src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
-	{ src = "https://github.com/nvim-lua/plenary.nvim" },
-	{ src = "https://github.com/LinArcX/telescope-env.nvim" },
+  { src = "https://github.com/aznhe21/actions-preview.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/LinArcX/telescope-env.nvim" },
 })
 
-
 -- ===================
--- Config 
+-- Config
 -- ===================
 local telescope = require("telescope")
 telescope.setup({
-	defaults = {
-		preview = { treesitter = true },
-		color_devicons = true,
-		sorting_strategy = "ascending",
+  defaults = {
+    layout_strategy = "vertical",
+    preview = { treesitter = true },
+    color_devicons = true,
+    sorting_strategy = "ascending",
     borderchars = {
-						"─", -- top
-						"│", -- right
-						"─", -- bottom
-						"│", -- left
-						"┌", -- top-left
-						"┐", -- top-right
-						"┘", -- bottom-right
-						"└", -- bottom-left
-					},
-		path_displays = { "smart" },
-	}
+      "─", -- top
+      "│", -- right
+      "─", -- bottom
+      "│", -- left
+      "┌", -- top-left
+      "┐", -- top-right
+      "┘", -- bottom-right
+      "└", -- bottom-left
+    },
+    path_displays = { "smart" },
+  },
+  pickers = {
+    buffers = {
+      show_all_buffers = true,
+      sort_lastused = true,
+      theme = "dropdown",
+      previewer = true,
+    },
+  },
 })
-telescope.load_extension("ui-select")
+-- telescope.load_extension("ui-select")
 
-require("actions-preview").setup {
-	backend = { "telescope" },
-	extensions = { "env" },
-	telescope = vim.tbl_extend(
-		"force",
-		require("telescope.themes").get_dropdown(), {}
-	)
-}
+require("actions-preview").setup({
+  backend = { "telescope" },
+  extensions = { "env" },
+  telescope = vim.tbl_extend("force", require("telescope.themes").get_dropdown(), {}),
+})
 
 -- ===================
 -- Keymaps
 -- ===================
-local builtin = require('telescope.builtin')
+local builtin = require("telescope.builtin")
 local map = vim.keymap.set
 map("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 map("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
