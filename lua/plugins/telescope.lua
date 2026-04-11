@@ -29,6 +29,22 @@ telescope.setup({
     path_displays = { "smart" },
   },
   pickers = {
+    find_files = {
+      find_command = {
+        "fd",
+        "--type",
+        "f",
+        "--hidden",
+        "--exclude",
+        ".git",
+        "--exclude",
+        "node_modules",
+        "--exclude",
+        "target",
+        "--exclude",
+        "dist",
+      },
+    },
     buffers = {
       show_all_buffers = true,
       sort_lastused = true,
